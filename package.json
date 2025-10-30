@@ -4,5 +4,8 @@
   "description": "Core for DLP",
   "type": "module",
   "author": "FedYou",
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^24.9.2"
+  }
 }

@@ -24,7 +24,7 @@ const COMMAND_ARGS = {
   AUDIO_MP3: ['-map', '0:a', '-c:a', 'libmp3lame', '-q:a', '0', '-f', 'mp3', '-y'],
   AUDIO_ACC: ['-map', '0:a', '-c:a', 'aac', '-f', 'mp4', '-y'],
   VIDEO: ['-c:v', 'copy', '-c:a', 'copy', '-y'],
-  JPEG: ['-q:v', '1', '-y']
+  JPEG: ['-q:v', '1', '-f', 'image2']
 }
 
 // ----------------------------

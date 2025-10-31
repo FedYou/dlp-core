@@ -21,6 +21,12 @@ export default async function ({
 }: Options): Promise<string> {
   const { NAMES, PATHS } = generateCache(data)
 
+  if (!existsCache(NAMES.jpeg)) {
+    on?.start('thumbnail')
+    await ffmpeg.toJpeg(PATHS.thumbnail, PATHS.jpeg)
+    on?.complete('thumbnail', 0)
+  }
+
   if (data.type === 'onlyAudio') {
     on?.start('audio')
     if (!existsCache(NAMES.audioMp3)) {

@@ -17,8 +17,8 @@ export interface MediaDownloadOptions {
 }
 
 interface MediaProcessOn {
-  start: (type: 'video' | 'audio') => void
-  complete: (type: 'video' | 'audio', code: number) => void
+  start: (type: 'video' | 'audio' | 'thumbnail') => void
+  complete: (type: 'video' | 'audio' | 'thumbnail', code: number) => void
 }
 
 export interface MediaProcessOptions {

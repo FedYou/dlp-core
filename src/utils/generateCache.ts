@@ -19,6 +19,7 @@ interface JSON {
     video: string
     tiktok: string
     thumbnail: string
+    jpeg: string
   }
   PATHS: {
     onlyVideo: string
@@ -29,6 +30,7 @@ interface JSON {
     video: string
     tiktok: string
     thumbnail: string
+    jpeg: string
   }
 }
 
@@ -62,7 +64,8 @@ export default function ({
     audioAac: sha256(platform + id + audioLanguage + 'acc'),
     video: sha256(platform + id + type + videoType + videoQuality + audioLanguage),
     tiktok: sha256(platform + id + type + videoQuality),
-    thumbnail: sha256(platform + id + 'thumbnail')
+    thumbnail: sha256(platform + id + 'thumbnail'),
+    jpeg: sha256(platform + id + 'jpeg')
   }
 
   const PATHS = {
@@ -73,7 +76,8 @@ export default function ({
     audioAac: resolveCache(NAMES.audioAac),
     video: resolveCache(NAMES.video),
     tiktok: resolveCache(NAMES.tiktok),
-    thumbnail: resolveCache(NAMES.thumbnail)
+    thumbnail: resolveCache(NAMES.thumbnail),
+    jpeg: resolveCache(NAMES.jpeg)
   }
 
   youfile.write.jsonSync(resolveCache(key), { NAMES, PATHS }, 0)

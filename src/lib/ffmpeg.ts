@@ -23,7 +23,8 @@ const COMMAND_ARGS = {
   AUDIO_WEBM: ['-map', '0:a', '-c:a', 'libvorbis', '-f', 'webm', '-y'],
   AUDIO_MP3: ['-map', '0:a', '-c:a', 'libmp3lame', '-q:a', '0', '-f', 'mp3', '-y'],
   AUDIO_ACC: ['-map', '0:a', '-c:a', 'aac', '-f', 'mp4', '-y'],
-  VIDEO: ['-c:v', 'copy', '-c:a', 'copy', '-y']
+  VIDEO: ['-c:v', 'copy', '-c:a', 'copy', '-y'],
+  JPEG: ['-q:v', '1', '-y']
 }
 
 // ----------------------------
@@ -83,4 +84,11 @@ async function toVideo({ entryVideo, entryAudio, outFile, metadata, type }: Vide
   await execAsync(COMMAND, args)
 }
 
-export default { toAudioMp3, toAudioWebm, toAudioAac, toVideo }
+async function toJpeg(entryFile: string, outFile: string) {
+  const args: (string | number)[] = ['-i', entryFile]
+  args.push(...COMMAND_ARGS.JPEG)
+  args.push(outFile)
+  return await execAsync(COMMAND, args)
+}
+
+export default { toAudioMp3, toAudioWebm, toAudioAac, toVideo, toJpeg }

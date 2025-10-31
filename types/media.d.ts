@@ -14,3 +14,13 @@ export interface MediaDownloadOptions {
   data: DataOptions
   on?: MediaDownloadOn
 }
+
+interface MediaProcessOn {
+  start: (type: 'video' | 'audio') => void
+  complete: (type: 'video' | 'audio', code: number) => void
+}
+
+export interface MediaProcessOptions {
+  data: DataOptions
+  on?: MediaProcessOn
+}

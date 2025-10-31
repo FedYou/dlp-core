@@ -21,9 +21,11 @@ export default async function ({
 }: MediaDownloadOptions) {
   const { NAMES } = generateCache(data)
 
-  on?.start('thumbnail')
-  await dlf({ url: thumbnail, fileName: NAMES.thumbnail, on: on as any })
-  on?.complete('thumbnail', 0)
+  if (!existsCache(NAMES.thumbnail)) {
+    on?.start('thumbnail')
+    await dlf({ url: thumbnail, fileName: NAMES.thumbnail, on: on as any })
+    on?.complete('thumbnail', 0)
+  }
 
   if (data.platform === 'tiktok') {
     const url = formats[data.videoType as 'mp4' | 'webm'][data.videoQuality ?? 0].url

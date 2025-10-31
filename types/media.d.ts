@@ -1,14 +1,15 @@
-import { DataOptions } from './enum'
+import type { DataOptions } from './enum'
 import type { FileDownloadProgress } from './dlf'
 
 export interface MediaDownloadOn {
-  start: (type: 'video' | 'audio') => void
+  start: (type: 'video' | 'audio' | 'thumbnail') => void
   progress: (data: FileDownloadProgress) => void
-  complete: (type: 'video' | 'audio', code: number) => void
+  complete: (type: 'video' | 'audio' | 'thumbnail', code: number) => void
 }
 
 export interface MediaDownloadOptions {
   formats: any
+  thumbnail: string
   referer?: string
   cookies?: string
   data: DataOptions

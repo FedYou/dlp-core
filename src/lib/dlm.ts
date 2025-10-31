@@ -21,6 +21,7 @@ export default async function ({ formats, referer, cookies, data, on }: MediaDow
     if (!existsCache(fileName)) {
       on?.start('video')
       await dlf({ url, referer, cookies, fileName: NAMES.tiktok, on: on as any })
+      on?.complete('video', 0)
     }
     return
   }
@@ -32,6 +33,7 @@ export default async function ({ formats, referer, cookies, data, on }: MediaDow
     if (!existsCache(fileName)) {
       on?.start('video')
       await dlf({ url, fileName: NAMES.onlyVideo, on: on as any })
+      on?.complete('video', 0)
     }
   }
   if (data.type === 'onlyAudio' || data.type === 'video') {
@@ -46,8 +48,9 @@ export default async function ({ formats, referer, cookies, data, on }: MediaDow
     const fileName = NAMES.onlyAudio
 
     if (!existsCache(fileName)) {
-      on?.start('video')
+      on?.start('audio')
       await dlf({ url, fileName: NAMES.onlyAudio, on: on as any })
+      on?.complete('audio', 0)
     }
   }
 }

@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "aria2": "^4.1.2",
+    "execa": "^9.6.0",
     "youcache": "^1.0.4",
     "youfile": "^1.0.11"
   }

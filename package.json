@@ -4,6 +4,9 @@
   "description": "Core for DLP",
   "type": "module",
   "types": "./types/main.d.ts",
+  "scripts": {
+    "build": "bun build.ts"
+  },
   "author": "FedYou",
   "license": "MIT",
   "devDependencies": {

@@ -26,7 +26,7 @@ export interface FormatAudioYT extends FormatAudioDefault {
 }
 
 export interface JSONIG {
-  plataform: 'instagram'
+  platform: 'instagram'
   title: string
   uploader: string
   description: string
@@ -41,7 +41,7 @@ export interface JSONIG {
 }
 
 export interface JSONYT {
-  plataform: 'youtube'
+  platform: 'youtube'
   language: string
   title: string
   uploader: string
@@ -61,7 +61,7 @@ export interface JSONYT {
 }
 
 export interface JSONTK {
-  plataform: 'tiktok'
+  platform: 'tiktok'
   title: string
   uploader: string
   description: string

@@ -94,7 +94,7 @@ export default function (json: any): JSONYT {
   }
 
   return {
-    plataform: 'youtube',
+    platform: 'youtube',
     language: json.language,
     title: json.title,
     uploader: json.uploader,

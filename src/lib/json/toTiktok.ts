@@ -35,7 +35,7 @@ export default function (json: any): JSONTK {
   formats.mp4 = formats.mp4.reverse()
 
   return {
-    plataform: 'tiktok',
+    platform: 'tiktok',
     title: json.title,
     uploader: json.uploader,
     description: json.description,

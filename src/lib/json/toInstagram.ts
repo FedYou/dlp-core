@@ -51,7 +51,7 @@ export default function (json: any): JSONIG {
   formats.mp4 = formats.mp4.reverse()
 
   return {
-    plataform: 'instagram',
+    platform: 'instagram',
     title: json.title,
     uploader: json.uploader,
     description: json.description,

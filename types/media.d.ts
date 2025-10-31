@@ -1,12 +1,8 @@
 import type { FileDownloadProgress } from './dlf'
-
+import type { JSONIG, JSONTK, JSONYT } from './json'
 export interface DataOptions {
   /**
-   * Platform
-   */
-  platform: 'youtube' | 'instagram' | 'tiktok'
-  /**
-   * Type of download
+   * Type
    *
    * Youtube: onlyVideo | onlyAudio | video
    *
@@ -15,10 +11,6 @@ export interface DataOptions {
    * Tiktok: video
    */
   type: 'onlyVideo' | 'onlyAudio' | 'video'
-  /**
-   * Id of video
-   */
-  id: string
   /**
    * Language of youtube audio
    */
@@ -46,10 +38,7 @@ export interface MediaDownloadOn {
 }
 
 export interface MediaDownloadOptions {
-  formats: any
-  thumbnail: string
-  referer?: string
-  cookies?: string
+  json: JSONIG | JSONTK | JSONYT
   data: DataOptions
   on?: MediaDownloadOn
 }
@@ -60,6 +49,7 @@ interface MediaProcessOn {
 }
 
 export interface MediaProcessOptions {
+  json: JSONIG | JSONTK | JSONYT
   data: DataOptions
   on?: MediaProcessOn
 }

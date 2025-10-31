@@ -13,13 +13,14 @@ import type { MediaProcessOptions as Options } from 'types/media'
 // ----------------------------
 
 export default async function ({
+  json,
   data,
   on = {
     start: () => {},
     complete: () => {}
   }
 }: Options): Promise<string> {
-  const { NAMES, PATHS } = generateCache(data)
+  const { NAMES, PATHS } = generateCache(json, data)
 
   if (!existsCache(NAMES.jpeg)) {
     on?.start('thumbnail')
@@ -35,7 +36,8 @@ export default async function ({
     on?.complete('audio', 0)
     return PATHS.audioMp3
   }
-  if (data.type === 'video' && data.platform === 'youtube') {
+
+  if (data.type === 'video' && json.platform === 'youtube') {
     let audioKeyName: 'audioAac' | 'audioWebm' = data.videoType === 'mp4' ? 'audioAac' : 'audioWebm'
 
     if (!existsCache(NAMES[audioKeyName])) {
@@ -62,7 +64,7 @@ export default async function ({
     on?.complete('video', 0)
     return PATHS.video
   }
-  if (data.type === 'video' && data.platform === 'instagram') {
+  if (data.type === 'video' && json.platform === 'instagram') {
     on?.start('video')
     if (!existsCache(NAMES.video)) {
       await ffmpeg.toVideo({

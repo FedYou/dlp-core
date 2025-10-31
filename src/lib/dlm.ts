@@ -11,25 +11,21 @@ import type { MediaDownloadOptions } from 'types/media'
 // --- Functions --------------
 // ----------------------------
 
-export default async function ({
-  formats,
-  thumbnail,
-  referer,
-  cookies,
-  data,
-  on
-}: MediaDownloadOptions) {
-  const { NAMES } = generateCache(data)
+export default async function ({ json, data, on }: MediaDownloadOptions) {
+  const { NAMES } = generateCache(json, data)
+  const { platform, formats } = json
 
   if (!existsCache(NAMES.thumbnail)) {
     on?.start('thumbnail')
-    await dlf({ url: thumbnail, fileName: NAMES.thumbnail, on: on as any })
+    await dlf({ url: json.thumbnail, fileName: NAMES.thumbnail, on: on as any })
     on?.complete('thumbnail', 0)
   }
 
-  if (data.platform === 'tiktok') {
-    const url = formats[data.videoType as 'mp4' | 'webm'][data.videoQuality ?? 0].url
+  if (platform === 'tiktok') {
+    const url = (formats as any)[data.videoType as 'mp4' | 'webm'][data.videoQuality ?? 0].url
     const fileName = NAMES.tiktok
+    const cookies = json?.cookies
+    const referer = json?.referer
 
     if (!existsCache(fileName)) {
       on?.start('video')
@@ -40,7 +36,7 @@ export default async function ({
   }
 
   if (data.type === 'onlyVideo' || data.type === 'video') {
-    const url = formats[data.videoType as 'mp4' | 'webm'][data.videoQuality ?? 0].url
+    const url = (formats as any)[data.videoType as 'mp4' | 'webm'][data.videoQuality ?? 0].url
     const fileName = NAMES.onlyVideo
 
     if (!existsCache(fileName)) {
@@ -52,10 +48,10 @@ export default async function ({
   if (data.type === 'onlyAudio' || data.type === 'video') {
     let url: string = ''
 
-    if (data.platform === 'youtube') {
-      url = formats.audio[data.audioLanguage as string].url
-    } else if (data.platform === 'instagram') {
-      url = formats.audio.url
+    if (platform === 'youtube') {
+      url = (formats as any).audio[data.audioLanguage as string].url
+    } else if (platform === 'instagram') {
+      url = (formats as any).audio.url
     }
 
     const fileName = NAMES.onlyAudio

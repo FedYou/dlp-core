@@ -2,12 +2,12 @@ import youfile from 'youfile'
 import sha256 from 'utils/sha256'
 import cache from 'global/cache'
 import existsCache from 'utils/existsCache'
-
+import type { JSONIG, JSONTK, JSONYT } from 'types/json'
 // ----------------------------
 // --- Types ------------------
 // ----------------------------
 
-import type { DataOptions } from 'types/enums'
+import type { DataOptions } from 'types/media'
 
 interface JSON {
   NAMES: {
@@ -42,14 +42,10 @@ function resolveCache(fileName: string) {
   return cache.path + '/' + fileName
 }
 
-export default function ({
-  platform,
-  id,
-  type,
-  videoType,
-  videoQuality,
-  audioLanguage
-}: DataOptions): JSON {
+export default function (json: JSONIG | JSONTK | JSONYT, data: DataOptions): JSON {
+  const { platform, id } = json
+  const { type, videoType, videoQuality, audioLanguage } = data
+
   const key = sha256('keys' + platform + id + type + videoType + videoQuality + audioLanguage)
 
   if (existsCache(key)) {

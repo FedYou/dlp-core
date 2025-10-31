@@ -22,10 +22,12 @@ export default async function ({
 }: Options): Promise<string> {
   const { NAMES, PATHS } = generateCache(json, data)
 
-  if (!existsCache(NAMES.jpeg)) {
-    on?.start('thumbnail')
-    await ffmpeg.toJpeg(PATHS.thumbnail, PATHS.jpeg)
-    on?.complete('thumbnail', 0)
+  if (data?.cover) {
+    if (!existsCache(NAMES.jpeg)) {
+      on?.start('thumbnail')
+      await ffmpeg.toJpeg(PATHS.thumbnail, PATHS.jpeg)
+      on?.complete('thumbnail', 0)
+    }
   }
 
   if (data.type === 'onlyAudio') {

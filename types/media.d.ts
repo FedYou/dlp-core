@@ -29,6 +29,12 @@ export interface DataOptions {
    * Index position of format video
    */
   videoQuality?: number
+  /**
+   * Download
+   *
+   * Default: false
+   */
+  cover?: boolean = false
 }
 
 export interface MediaDownloadOn {

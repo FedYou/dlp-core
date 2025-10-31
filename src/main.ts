@@ -1,3 +1,4 @@
+import './stopExec'
 import downloadMedia from 'lib/dlm'
 import processMedia from 'lib/processMedia'
 import getJSON from 'lib/json/get'

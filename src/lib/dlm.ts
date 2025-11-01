@@ -11,11 +11,11 @@ import type { MediaDownloadOptions } from 'types/media'
 // --- Functions --------------
 // ----------------------------
 
-export default async function ({ json, data, on }: MediaDownloadOptions) {
-  const { NAMES } = generateCache(json, data)
+export default async function ({ json, options, on }: MediaDownloadOptions) {
+  const { NAMES } = generateCache(json, options)
   const { platform, formats } = json
 
-  if (data?.cover) {
+  if (options?.cover) {
     if (!existsCache(NAMES.thumbnail)) {
       on?.start('thumbnail')
       await dlf({ url: json.thumbnail, fileName: NAMES.thumbnail, on: on as any })
@@ -24,7 +24,7 @@ export default async function ({ json, data, on }: MediaDownloadOptions) {
   }
 
   if (platform === 'tiktok') {
-    const url = (formats as any)[data.videoType as 'mp4' | 'webm'][data.videoQuality ?? 0].url
+    const url = (formats as any)[options.vformat as 'mp4' | 'webm'][options.vquality ?? 0].url
     const fileName = NAMES.tiktok
     const cookies = json?.cookies
     const referer = json?.referer
@@ -37,8 +37,8 @@ export default async function ({ json, data, on }: MediaDownloadOptions) {
     return
   }
 
-  if (data.type === 'onlyVideo' || data.type === 'video') {
-    const url = (formats as any)[data.videoType as 'mp4' | 'webm'][data.videoQuality ?? 0].url
+  if (options.type === 'onlyVideo' || options.type === 'video') {
+    const url = (formats as any)[options.vformat as 'mp4' | 'webm'][options.vquality ?? 0].url
     const fileName = NAMES.onlyVideo
 
     if (!existsCache(fileName)) {
@@ -47,11 +47,11 @@ export default async function ({ json, data, on }: MediaDownloadOptions) {
       on?.complete('video', 0)
     }
   }
-  if (data.type === 'onlyAudio' || data.type === 'video') {
+  if (options.type === 'onlyAudio' || options.type === 'video') {
     let url: string = ''
 
     if (platform === 'youtube') {
-      url = (formats as any).audio[data.audioLanguage as string].url
+      url = (formats as any).audio[options.language as string].url
     } else if (platform === 'instagram') {
       url = (formats as any).audio.url
     }

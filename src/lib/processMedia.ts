@@ -14,15 +14,15 @@ import type { MediaProcessOptions as Options } from 'types/media'
 
 export default async function ({
   json,
-  data,
+  options,
   on = {
     start: () => {},
     complete: () => {}
   }
 }: Options): Promise<string> {
-  const { NAMES, PATHS } = generateCache(json, data)
+  const { NAMES, PATHS } = generateCache(json, options)
 
-  if (data?.cover) {
+  if (options?.cover) {
     if (!existsCache(NAMES.jpeg)) {
       on?.start('thumbnail')
       await ffmpeg.toJpeg(PATHS.thumbnail, PATHS.jpeg)
@@ -30,7 +30,7 @@ export default async function ({
     }
   }
 
-  if (data.type === 'onlyAudio') {
+  if (options.type === 'onlyAudio') {
     on?.start('audio')
     if (!existsCache(NAMES.audioMp3)) {
       await ffmpeg.toAudioMp3(PATHS.onlyAudio, PATHS.audioMp3)
@@ -39,14 +39,14 @@ export default async function ({
     return PATHS.audioMp3
   }
 
-  if (data.type === 'video' && json.platform === 'youtube') {
-    let audioKeyName: 'audioAac' | 'audioWebm' = data.videoType === 'mp4' ? 'audioAac' : 'audioWebm'
+  if (options.type === 'video' && json.platform === 'youtube') {
+    let audioKeyName: 'audioAac' | 'audioWebm' = options.vformat === 'mp4' ? 'audioAac' : 'audioWebm'
 
     if (!existsCache(NAMES[audioKeyName])) {
       on?.start('audio')
-      if (data.videoType === 'mp4') {
+      if (options.vformat === 'mp4') {
         await ffmpeg.toAudioAac(PATHS.onlyAudio, PATHS.audioAac)
-      } else if (data.videoType === 'webm') {
+      } else if (options.vformat === 'webm') {
         await ffmpeg.toAudioWebm(PATHS.onlyAudio, PATHS.audioWebm)
       }
       on?.complete('audio', 0)
@@ -59,21 +59,21 @@ export default async function ({
         entryVideo: PATHS.onlyVideo,
         entryAudio: PATHS[audioKeyName],
         outFile: PATHS.video,
-        type: data.videoType as 'mp4' | 'webm'
+        type: options.vformat as 'mp4' | 'webm'
       })
     }
 
     on?.complete('video', 0)
     return PATHS.video
   }
-  if (data.type === 'video' && json.platform === 'instagram') {
+  if (options.type === 'video' && json.platform === 'instagram') {
     on?.start('video')
     if (!existsCache(NAMES.video)) {
       await ffmpeg.toVideo({
         entryVideo: PATHS.onlyVideo,
         entryAudio: PATHS.onlyAudio,
         outFile: PATHS.video,
-        type: data.videoType as 'mp4' | 'webm'
+        type: options.vformat as 'mp4' | 'webm'
       })
     }
     on?.complete('video', 0)

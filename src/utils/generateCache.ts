@@ -42,24 +42,24 @@ function resolveCache(fileName: string) {
   return cache.path + '/' + fileName
 }
 
-export default function (json: JSONIG | JSONTK | JSONYT, data: DataOptions): JSON {
+export default function (json: JSONIG | JSONTK | JSONYT, options: DataOptions): JSON {
   const { platform, id } = json
-  const { type, videoType, videoQuality, audioLanguage } = data
+  const { type, vformat, vquality, language } = options
 
-  const key = sha256('keys' + platform + id + type + videoType + videoQuality + audioLanguage)
+  const key = sha256('keys' + platform + id + type + vformat + vquality + language)
 
   if (existsCache(key)) {
     return youfile.read.jsonSync(resolveCache(key)) as JSON
   }
 
   const NAMES = {
-    onlyVideo: sha256(platform + id + videoType + videoQuality),
-    onlyAudio: sha256(platform + id + audioLanguage),
-    audioWebm: sha256(platform + id + audioLanguage + 'webm'),
-    audioMp3: sha256(platform + id + audioLanguage + 'mp3'),
-    audioAac: sha256(platform + id + audioLanguage + 'acc'),
-    video: sha256(platform + id + type + videoType + videoQuality + audioLanguage),
-    tiktok: sha256(platform + id + type + videoQuality),
+    onlyVideo: sha256(platform + id + vformat + vquality),
+    onlyAudio: sha256(platform + id + language),
+    audioWebm: sha256(platform + id + language + 'webm'),
+    audioMp3: sha256(platform + id + language + 'mp3'),
+    audioAac: sha256(platform + id + language + 'acc'),
+    video: sha256(platform + id + type + vformat + vquality + language),
+    tiktok: sha256(platform + id + type + vquality),
     thumbnail: sha256(platform + id + 'thumbnail'),
     jpeg: sha256(platform + id + 'jpeg')
   }

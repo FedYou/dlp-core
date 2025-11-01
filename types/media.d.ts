@@ -11,29 +11,9 @@ export interface DataOptions {
    * Tiktok: video
    */
   type: 'onlyVideo' | 'onlyAudio' | 'video'
-  /**
-   * Language of youtube audio
-   */
-  audioLanguage?: string
-  /**
-   * Type of video
-   *
-   * Youtube: mp4 | webm
-   *
-   * Instagram: mp4
-   *
-   * Tiktok: mp4
-   */
-  videoType?: 'mp4' | 'webm'
-  /**
-   * Index position of format video
-   */
-  videoQuality?: number
-  /**
-   * Download
-   *
-   * Default: false
-   */
+  language?: string
+  vformat?: 'mp4' | 'webm'
+  vquality?: number
   cover?: boolean = false
 }
 
@@ -45,7 +25,7 @@ export interface MediaDownloadOn {
 
 export interface MediaDownloadOptions {
   json: JSONIG | JSONTK | JSONYT
-  data: DataOptions
+  options: DataOptions
   on?: MediaDownloadOn
 }
 
@@ -56,6 +36,6 @@ interface MediaProcessOn {
 
 export interface MediaProcessOptions {
   json: JSONIG | JSONTK | JSONYT
-  data: DataOptions
+  options: DataOptions
   on?: MediaProcessOn
 }

@@ -6,7 +6,7 @@ import toJSONYT from 'lib/json/toYoutube'
 import toJSONIG from 'lib/json/toInstagram'
 import toJSONTK from 'lib/json/toTiktok'
 import platformURL from 'utils/platformURL'
-import type { MediaDownloadOptions, MediaProcessOptions } from 'types/media'
+import type { DataOptions, MediaDownloadOn, MediaProcessOn } from 'types/media'
 
 class DLP {
   private url: any
@@ -40,14 +40,14 @@ class DLP {
     }
   }
 
-  async downloadMedia(options: MediaDownloadOptions) {
+  async downloadMedia(options: DataOptions, on?: MediaDownloadOn) {
     if (!this.platform || !this.url) return
-    await downloadMedia({ json: this.json, data: options.data, on: options.on })
+    await downloadMedia({ json: this.json, options, on })
   }
 
-  async processMedia(options: MediaProcessOptions) {
+  async processMedia(options: DataOptions, on?: MediaProcessOn) {
     if (!this.platform || !this.url) return
-    return await processMedia({ json: this.json, data: options.data, on: options.on })
+    return await processMedia({ json: this.json, options, on })
   }
 }
 

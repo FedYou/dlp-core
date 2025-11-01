@@ -5,30 +5,51 @@ import getJSON from 'lib/json/get'
 import toJSONYT from 'lib/json/toYoutube'
 import toJSONIG from 'lib/json/toInstagram'
 import toJSONTK from 'lib/json/toTiktok'
-import type { JSONIG, JSONYT, JSONTK } from 'types/json'
+import platformURL from 'utils/platformURL'
+import type { MediaDownloadOptions, MediaProcessOptions } from 'types/media'
 
-async function getJSONToConvert(url: string, func: any) {
-  const json = await getJSON(url)
-  if (json) return func(json)
-  return null
+class DLP {
+  private url: any
+  private dumpJSON: any
+  private json: any
+  private platform: any
+
+  async addURL(url: string) {
+    this.url = url
+    this.platform = platformURL(url)
+
+    if (this.platform === null) {
+      throw new Error('Invalid URL', {
+        cause: {
+          code: 'INVALID_URL',
+          value: url
+        }
+      })
+    }
+  }
+  async getJSON() {
+    if (!this.platform || !this.url) return
+    this.dumpJSON = await getJSON(this.url)
+    if (!this.dumpJSON) return
+    if (this.platform === 'youtube') {
+      this.json = toJSONYT(this.dumpJSON)
+    } else if (this.platform === 'instagram') {
+      this.json = toJSONIG(this.dumpJSON)
+    } else if (this.platform === 'tiktok') {
+      this.json = toJSONTK(this.dumpJSON)
+    }
+  }
+
+  async downloadMedia(options: MediaDownloadOptions) {
+    if (!this.platform || !this.url) return
+    await downloadMedia({ json: this.json, data: options.data, on: options.on })
+  }
+
+  async processMedia(options: MediaProcessOptions) {
+    if (!this.platform || !this.url) return
+    return await processMedia({ json: this.json, data: options.data, on: options.on })
+  }
 }
 
-async function getJSONYT(url: string): Promise<JSONYT | null> {
-  return getJSONToConvert(url, toJSONYT)
-}
-async function getJSONIG(url: string): Promise<JSONIG | null> {
-  return getJSONToConvert(url, toJSONIG)
-}
-async function getJSONTK(url: string): Promise<JSONTK | null> {
-  return getJSONToConvert(url, toJSONTK)
-}
-
-export { getJSON, getJSONYT, getJSONIG, getJSONTK, downloadMedia, processMedia }
-export default {
-  getJSON,
-  getJSONYT,
-  getJSONIG,
-  getJSONTK,
-  downloadMedia,
-  processMedia
-}
+export { DLP }
+export default { DLP }

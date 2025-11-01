@@ -48,10 +48,14 @@ export default async function ({ json, options, on }: MediaDownloadOptions) {
     }
   }
   if (options.type === 'onlyAudio' || options.type === 'video') {
+    if (!json.formats.audio) return
+
     let url: string = ''
 
     if (platform === 'youtube') {
-      url = (formats as any).audio[options.language as string].url
+      url = (
+        (formats as any).audio[options?.language as string] ?? (formats as any).audio[json.language]
+      ).url
     } else if (platform === 'instagram') {
       url = (formats as any).audio.url
     }

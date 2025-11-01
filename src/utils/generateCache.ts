@@ -43,8 +43,15 @@ function resolveCache(fileName: string) {
 }
 
 export default function (json: JSONIG | JSONTK | JSONYT, options: DataOptions): JSON {
-  const { platform, id } = json
-  const { type, vformat, vquality, language } = options
+  const { platform, id, formats } = json
+  const { type, vformat, vquality } = options
+  let language: string
+
+  if (platform === 'youtube' && formats.audio) {
+    language = (formats as any).audio[options?.language as string] ?? formats.audio[json.language]
+  } else {
+    language = ''
+  }
 
   const key = sha256('keys' + platform + id + type + vformat + vquality + language)
 

@@ -30,7 +30,7 @@ export default async function ({
     }
   }
 
-  if (options.type === 'onlyAudio') {
+  if (options.type === 'onlyAudio' && (json as any).formats.audio) {
     on?.start('audio')
     if (!existsCache(NAMES.audioMp3)) {
       await ffmpeg.toAudioMp3(PATHS.onlyAudio, PATHS.audioMp3)
@@ -39,7 +39,7 @@ export default async function ({
     return PATHS.audioMp3
   }
 
-  if (options.type === 'video' && json.platform === 'youtube') {
+  if (options.type === 'video' && json.platform === 'youtube' && (json as any).formats.audio) {
     let audioKeyName: 'audioAac' | 'audioWebm' = options.vformat === 'mp4' ? 'audioAac' : 'audioWebm'
 
     if (!existsCache(NAMES[audioKeyName])) {

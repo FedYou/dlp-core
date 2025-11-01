@@ -1,4 +1,6 @@
 import './stopExec'
+import path from 'path'
+import youfile from 'youfile'
 import downloadMedia from 'lib/dlm'
 import processMedia from 'lib/processMedia'
 import getJSON from 'lib/json/get'
@@ -6,13 +8,14 @@ import toJSONYT from 'lib/json/toYoutube'
 import toJSONIG from 'lib/json/toInstagram'
 import toJSONTK from 'lib/json/toTiktok'
 import platformURL from 'utils/platformURL'
-import type { DataOptions, MediaDownloadOn, MediaProcessOn } from 'types/media'
+import type { DataOptions } from 'types/media'
 
 class DLP {
   private url: any
   private dumpJSON: any
   private json: any
   private platform: any
+  private outputFile: any
 
   async addURL(url: string) {
     this.url = url
@@ -26,6 +29,9 @@ class DLP {
         }
       })
     }
+
+    if (this.outputFile) this.outputFile = ''
+
     await this.getJSON()
   }
 
@@ -41,14 +47,14 @@ class DLP {
     }
   }
 
-  async downloadMedia(options: DataOptions, on?: MediaDownloadOn) {
-    if (!this.platform || !this.url) return
-    await downloadMedia({ json: this.json, options, on })
+  async getMedia(options: DataOptions) {
+    await downloadMedia({ json: this.json, options })
+    this.outputFile = await processMedia({ json: this.json, options })
   }
 
-  async processMedia(options: DataOptions, on?: MediaProcessOn) {
-    if (!this.platform || !this.url) return
-    return await processMedia({ json: this.json, options, on })
+  async saveMedia(dir: string, fileName: string) {
+    if (!this.outputFile) return
+    await youfile.copy(this.outputFile, path.join(dir, fileName))
   }
 }
 

@@ -1,11 +1,11 @@
-import type { MediaProcessOptions, MediaDownloadOptions } from './media'
+import type { DataOptions, MediaDownloadOn, MediaProcessOn } from './media'
 
 declare namespace core {
   class DLP {
     addURL(url: string): Promise<void>
     async getJSON(): Promise<void>
-    async downloadMedia(options: MediaDownloadOptions): Promise<void>
-    async processMedia(options: MediaProcessOptions): Promise<string>
+    async downloadMedia(options: DataOptions, on?: MediaDownloadOn): Promise<void>
+    async processMedia(options: DataOptions, on?: MediaProcessOn): Promise<string>
   }
 }
 

@@ -26,9 +26,10 @@ class DLP {
         }
       })
     }
+    await this.getJSON()
   }
-  async getJSON() {
-    if (!this.platform || !this.url) return
+
+  private async getJSON() {
     this.dumpJSON = await getJSON(this.url)
     if (!this.dumpJSON) return
     if (this.platform === 'youtube') {

@@ -48,6 +48,16 @@ class DLP {
   }
 
   async getMedia(options: DataOptions) {
+    if (options.type === 'video' || options.type === 'onlyAudio') {
+      if (!this.json.formats.audio) {
+        throw new Error('Audio no available in this video', {
+          cause: {
+            code: 'AUDIO_NOT_AVAILABLE'
+          }
+        })
+      }
+    }
+
     await downloadMedia({ json: this.json, options })
     this.outputFile = await processMedia({ json: this.json, options })
   }

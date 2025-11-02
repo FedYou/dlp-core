@@ -1,4 +1,7 @@
+import cache from 'global/cache'
+import path from 'path'
 import { execAsync } from 'utils/exec'
+import youfile from 'youfile'
 // ----------------------------
 // --- Types ------------------
 // ----------------------------
@@ -16,6 +19,9 @@ interface VideoOptions {
 // ----------------------------
 // --- Variables --------------
 // ----------------------------
+
+const FILE_TEMP_PATH = path.join(cache.path, 'temp.process.dlp')
+
 const COMMAND = 'ffmpeg'
 
 const COMMAND_ARGS = {
@@ -61,6 +67,10 @@ const COMMAND_ARGS = {
 // --- Functions --------------
 // ----------------------------
 
+async function renameTempFile(filePath: string) {
+  await youfile.move(FILE_TEMP_PATH, filePath)
+}
+
 // Add metadata to ffmpeg args
 function metadataToArgs(metadata: any) {
   const args: (string | number)[] = []
@@ -86,9 +96,10 @@ async function toAudio(
   if (type === 'webm') args.push(...COMMAND_ARGS.AUDIO_WEBM)
   else if (type === 'aac') args.push(...COMMAND_ARGS.AUDIO_ACC)
   else if (type === 'mp3') args.push(...COMMAND_ARGS.AUDIO_MP3)
-  args.push(outFile)
+  args.push(FILE_TEMP_PATH)
 
   await execAsync(COMMAND, args)
+  await renameTempFile(outFile)
 }
 
 async function toAudioMp3(entryFile: string, outFile: string, metadata?: any) {
@@ -107,9 +118,10 @@ async function toMp3Cover(entryAudio: string, entryCover: string, outFile: strin
   const args: (string | number)[] = ['-i', entryAudio, '-i', entryCover]
 
   args.push(...COMMAND_ARGS.MP3_COVER)
-  args.push(outFile)
+  args.push(FILE_TEMP_PATH)
 
   await execAsync(COMMAND, args)
+  await renameTempFile(outFile)
 }
 
 async function toVideo({ entryVideo, entryAudio, outFile, metadata, type }: VideoOptions) {
@@ -118,25 +130,28 @@ async function toVideo({ entryVideo, entryAudio, outFile, metadata, type }: Vide
   if (metadata) args.push(...metadataToArgs(metadata))
   args.push(...COMMAND_ARGS.VIDEO)
   args.push('-f', type)
-  args.push(outFile)
+  args.push(FILE_TEMP_PATH)
 
   await execAsync(COMMAND, args)
+  await renameTempFile(outFile)
 }
 
 async function toMp4Cover(entryVideo: string, entryCover: string, outFile: string) {
   const args: (string | number)[] = ['-i', entryVideo, '-i', entryCover]
 
   args.push(...COMMAND_ARGS.MP4_COVER)
-  args.push(outFile)
+  args.push(FILE_TEMP_PATH)
 
   await execAsync(COMMAND, args)
+  await renameTempFile(outFile)
 }
 
 async function toJpeg(entryFile: string, outFile: string) {
   const args: (string | number)[] = ['-i', entryFile]
   args.push(...COMMAND_ARGS.JPEG)
-  args.push(outFile)
-  return await execAsync(COMMAND, args)
+  args.push(FILE_TEMP_PATH)
+  await execAsync(COMMAND, args)
+  await renameTempFile(outFile)
 }
 
 export default { toAudioMp3, toAudioWebm, toAudioAac, toVideo, toJpeg, toMp3Cover, toMp4Cover }

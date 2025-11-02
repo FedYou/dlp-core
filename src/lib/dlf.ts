@@ -4,6 +4,8 @@ import getSize from 'utils/getSize'
 import getTime from 'utils/getTime'
 import cache from 'global/cache'
 import { execa } from 'execa'
+import path from 'path'
+import youfile from 'youfile'
 
 // ----------------------------
 // --- Types ------------------
@@ -26,7 +28,7 @@ const HTTP_HEADERS = {
 // ----------------------------
 // --------- Aria2 RPC --------
 // ----------------------------
-
+const FILE_TEMP_NAME = 'temp.download.dlp'
 const RPC_SECRET = Math.random().toString(36).substring(2, 15)
 
 const COMMAND = 'aria2c'
@@ -114,7 +116,9 @@ async function dlf({
     await aria2.open()
 
     // Start download
-    const gidOptions = { ...GID_OPTIONS, dir: cache.path, out: fileName }
+    await youfile.removeExists(path.join(cache.path, FILE_TEMP_NAME))
+
+    const gidOptions = { ...GID_OPTIONS, dir: cache.path, out: FILE_TEMP_NAME }
 
     const gid = await aria2.call('addUri', [url], gidOptions)
 
@@ -128,6 +132,7 @@ async function dlf({
         if (tellStatus.status === 'complete') {
           clearInterval(interval)
           on.complete(0)
+          await youfile.move(path.join(cache.path, FILE_TEMP_NAME), path.join(cache.path, fileName))
           await aria2.close()
         }
       } catch (err) {

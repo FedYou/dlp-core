@@ -68,7 +68,8 @@ class DLP {
     await youfile.copy(this.outputFile, path.join(dir, fileName))
   }
 
-  getInfo(): VideoInfo {
+  getInfo(): VideoInfo | null {
+    if (!this.json) return null
     const data: VideoInfo = {
       title: this.json.title,
       uploader: this.json.uploader,

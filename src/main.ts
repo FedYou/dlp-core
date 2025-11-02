@@ -9,6 +9,7 @@ import toJSONIG from 'lib/json/toInstagram'
 import toJSONTK from 'lib/json/toTiktok'
 import platformURL from 'utils/platformURL'
 import type { DataOptions } from 'types/media'
+import type { VideoInfo } from 'types/any'
 
 class DLP {
   private url: any
@@ -65,6 +66,23 @@ class DLP {
   async saveMedia(dir: string, fileName: string) {
     if (!this.outputFile) return
     await youfile.copy(this.outputFile, path.join(dir, fileName))
+  }
+
+  getInfo(): VideoInfo {
+    const data: VideoInfo = {
+      title: this.json.title,
+      uploader: this.json.uploader,
+      description: this.json.description,
+      upload_date: this.json.upload_date,
+      duration: this.json.duration,
+      thumbnail: this.json.thumbnail,
+      id: this.json.id,
+      platform: this.json.platform
+    }
+    if (this.json.views) data.views = this.json.views
+    if (this.json.language) data.language = this.json.language
+
+    return data
   }
 }
 

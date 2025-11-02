@@ -10,3 +10,9 @@ export interface VideoInfo {
   views?: string
   language?: string
 }
+
+export interface Metadata {
+  title: string
+  artist: string
+  description: string
+}

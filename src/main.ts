@@ -9,7 +9,7 @@ import toJSONIG from 'lib/json/toInstagram'
 import toJSONTK from 'lib/json/toTiktok'
 import platformURL from 'utils/platformURL'
 import type { DataOptions } from 'types/media'
-import type { VideoInfo } from 'types/any'
+import type { VideoInfo, Metadata } from 'types/any'
 
 class DLP {
   private url: any
@@ -84,6 +84,15 @@ class DLP {
     if (this.json.language) data.language = this.json.language
 
     return data
+  }
+
+  private getMetadata(): Metadata | null {
+    if (!this.json) return null
+    return {
+      title: this.json.title,
+      artist: this.json.uploader,
+      description: this.json.description
+    }
   }
 }
 

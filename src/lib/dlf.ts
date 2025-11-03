@@ -133,20 +133,14 @@ async function dlf({
           clearInterval(interval)
           on.complete(0)
           await youfile.move(path.join(cache.path, FILE_TEMP_NAME), path.join(cache.path, fileName))
-          await aria2.close()
+          resolve()
         }
       } catch (err) {
         clearInterval(interval)
         on.complete(1)
-        await aria2.close()
         reject(err)
       }
     }, 100)
-
-    aria2.on('close', () => {
-      clearInterval(interval)
-      resolve()
-    })
   })
 }
 

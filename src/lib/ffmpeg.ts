@@ -129,10 +129,9 @@ async function toMp3Cover({
 
   if (metadata) args.push(...metadataToArgs(metadata))
   args.push(...COMMAND_ARGS.MP3_COVER)
-  args.push(FILE_TEMP_PATH)
+  args.push(`"${outFile}"`)
 
   await execAsync(COMMAND, args)
-  await renameTempFile(outFile)
 }
 
 async function toVideo({ entryVideo, entryAudio, outFile, metadata, type }: VideoOptions) {
@@ -162,17 +161,16 @@ async function toMp4Cover({
 
   if (metadata) args.push(...metadataToArgs(metadata))
   args.push(...COMMAND_ARGS.MP4_COVER)
-  args.push(FILE_TEMP_PATH)
+  args.push(`"${outFile}"`)
 
   await execAsync(COMMAND, args)
-  await renameTempFile(outFile)
 }
 
 async function addMetadata(entryFile: string, outFile: string, metadata: any) {
   const args: (string | number)[] = ['-i', entryFile]
 
   args.push(...metadataToArgs(metadata))
-  args.push(outFile)
+  args.push(`"${outFile}"`)
 
   await execAsync(COMMAND, args)
 }

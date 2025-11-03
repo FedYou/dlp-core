@@ -170,6 +170,7 @@ async function addMetadata(entryFile: string, outFile: string, metadata: any) {
   const args: (string | number)[] = ['-i', entryFile]
 
   args.push(...metadataToArgs(metadata))
+  args.push(...COMMAND_ARGS.VIDEO)
   args.push(`"${outFile}"`)
 
   await execAsync(COMMAND, args)

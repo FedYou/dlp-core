@@ -114,9 +114,20 @@ async function toAudioAac(entryFile: string, outFile: string) {
   return await toAudio(entryFile, outFile, 'aac')
 }
 
-async function toMp3Cover(entryAudio: string, entryCover: string, outFile: string) {
+async function toMp3Cover({
+  entryAudio,
+  entryCover,
+  outFile,
+  metadata
+}: {
+  entryAudio: string
+  entryCover: string
+  outFile: string
+  metadata?: any
+}) {
   const args: (string | number)[] = ['-i', entryAudio, '-i', entryCover]
 
+  if (metadata) args.push(...metadataToArgs(metadata))
   args.push(...COMMAND_ARGS.MP3_COVER)
   args.push(FILE_TEMP_PATH)
 
@@ -136,9 +147,20 @@ async function toVideo({ entryVideo, entryAudio, outFile, metadata, type }: Vide
   await renameTempFile(outFile)
 }
 
-async function toMp4Cover(entryVideo: string, entryCover: string, outFile: string) {
+async function toMp4Cover({
+  entryCover,
+  entryVideo,
+  outFile,
+  metadata
+}: {
+  entryVideo: string
+  entryCover: string
+  outFile: string
+  metadata?: any
+}) {
   const args: (string | number)[] = ['-i', entryVideo, '-i', entryCover]
 
+  if (metadata) args.push(...metadataToArgs(metadata))
   args.push(...COMMAND_ARGS.MP4_COVER)
   args.push(FILE_TEMP_PATH)
 

@@ -19,7 +19,12 @@ export default async function ({
     start: () => {},
     complete: () => {}
   }
-}: Options): Promise<string> {
+}: Options): Promise<{
+  path: string
+  cover: string
+  type: 'video' | 'audio'
+  format: 'mp4' | 'webm' | 'mp3'
+}> {
   const { NAMES, PATHS } = generateCache(json, options)
 
   if (!existsCache(NAMES.jpeg)) {
@@ -34,7 +39,7 @@ export default async function ({
       await ffmpeg.toAudioMp3(PATHS.onlyAudio, PATHS.audioMp3)
     }
     on?.complete('audio', 0)
-    return PATHS.audioMp3
+    return { path: PATHS.audioMp3, cover: PATHS.jpeg, type: 'audio', format: 'mp3' }
   }
 
   if (options.type === 'video' && json.platform === 'youtube' && (json as any).formats.audio) {
@@ -62,7 +67,12 @@ export default async function ({
     }
 
     on?.complete('video', 0)
-    return PATHS.video
+    return {
+      path: PATHS.video,
+      cover: PATHS.jpeg,
+      type: 'video',
+      format: options.vformat as 'mp4' | 'webm'
+    }
   }
   if (options.type === 'video' && json.platform === 'instagram') {
     on?.start('video')
@@ -76,10 +86,20 @@ export default async function ({
     }
     on?.complete('video', 0)
 
-    return PATHS.video
+    return {
+      path: PATHS.video,
+      cover: PATHS.jpeg,
+      type: 'video',
+      format: options.vformat as 'mp4' | 'webm'
+    }
   }
 
   // onlyVideo
 
-  return PATHS.onlyVideo
+  return {
+    path: PATHS.onlyVideo,
+    cover: PATHS.jpeg,
+    type: 'video',
+    format: options.vformat as 'mp4' | 'webm'
+  }
 }

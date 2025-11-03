@@ -2,6 +2,7 @@ import './stopExec'
 import path from 'path'
 import youfile from 'youfile'
 import downloadMedia from 'lib/dlm'
+import ffmpeg from 'lib/ffmpeg'
 import processMedia from 'lib/processMedia'
 import getJSON from 'lib/json/get'
 import toJSONYT from 'lib/json/toYoutube'
@@ -16,7 +17,7 @@ class DLP {
   private dumpJSON: any
   private json: any
   private platform: any
-  private outputFile: any
+  private output: any
 
   async addURL(url: string) {
     this.url = url
@@ -31,7 +32,7 @@ class DLP {
       })
     }
 
-    if (this.outputFile) this.outputFile = ''
+    if (this.output) this.output = ''
 
     await this.getJSON()
   }
@@ -60,12 +61,48 @@ class DLP {
     }
 
     await downloadMedia({ json: this.json, options })
-    this.outputFile = await processMedia({ json: this.json, options })
+    this.output = await processMedia({ json: this.json, options })
   }
 
-  async saveMedia(dir: string, fileName: string) {
-    if (!this.outputFile) return
-    await youfile.copy(this.outputFile, path.join(dir, fileName))
+  async saveMedia({
+    dir,
+    fileName,
+    cover = false,
+    metadata = false
+  }: {
+    dir: string
+    fileName: string
+    cover?: boolean
+    metadata?: boolean
+  }) {
+    if (!this.output) return
+
+    if (cover) {
+      if (this.output.type === 'video' && this.output.format === 'mp4') {
+        await ffmpeg.toMp4Cover({
+          entryVideo: this.output.path,
+          entryCover: this.output.cover,
+          outFile: path.join(dir, fileName),
+          metadata: this.getMetadata()
+        })
+        return
+      }
+      if (this.output.type === 'audio') {
+        await ffmpeg.toMp3Cover({
+          entryAudio: this.output.path,
+          entryCover: this.output.cover,
+          outFile: path.join(dir, fileName),
+          metadata: this.getMetadata()
+        })
+        return
+      }
+    }
+
+    if (metadata) {
+      await ffmpeg.addMetadata(this.output.path, path.join(dir, fileName), this.getMetadata())
+      return
+    }
+    await youfile.copy(this.output.path, path.join(dir, fileName))
   }
 
   getInfo(): VideoInfo | null {

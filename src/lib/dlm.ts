@@ -15,12 +15,10 @@ export default async function ({ json, options, on }: MediaDownloadOptions) {
   const { NAMES } = generateCache(json, options)
   const { platform, formats } = json
 
-  if (options?.cover) {
-    if (!existsCache(NAMES.thumbnail)) {
-      on?.start('thumbnail')
-      await dlf({ url: json.thumbnail, fileName: NAMES.thumbnail, on: on as any })
-      on?.complete('thumbnail', 0)
-    }
+  if (!existsCache(NAMES.thumbnail)) {
+    on?.start('thumbnail')
+    await dlf({ url: json.thumbnail, fileName: NAMES.thumbnail, on: on as any })
+    on?.complete('thumbnail', 0)
   }
 
   if (platform === 'tiktok') {

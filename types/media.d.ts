@@ -14,7 +14,6 @@ export interface DataOptions {
   language?: string
   vformat?: 'mp4' | 'webm'
   vquality?: number
-  cover?: boolean = false
 }
 
 export interface MediaDownloadOn {

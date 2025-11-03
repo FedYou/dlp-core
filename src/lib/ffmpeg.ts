@@ -168,6 +168,15 @@ async function toMp4Cover({
   await renameTempFile(outFile)
 }
 
+async function addMetadata(entryFile: string, outFile: string, metadata: any) {
+  const args: (string | number)[] = ['-i', entryFile]
+
+  args.push(...metadataToArgs(metadata))
+  args.push(outFile)
+
+  await execAsync(COMMAND, args)
+}
+
 async function toJpeg(entryFile: string, outFile: string) {
   const args: (string | number)[] = ['-i', entryFile]
   args.push(...COMMAND_ARGS.JPEG)
@@ -176,4 +185,13 @@ async function toJpeg(entryFile: string, outFile: string) {
   await renameTempFile(outFile)
 }
 
-export default { toAudioMp3, toAudioWebm, toAudioAac, toVideo, toJpeg, toMp3Cover, toMp4Cover }
+export default {
+  toAudioMp3,
+  toAudioWebm,
+  toAudioAac,
+  toVideo,
+  toJpeg,
+  toMp3Cover,
+  toMp4Cover,
+  addMetadata
+}

@@ -11,6 +11,7 @@ import toJSONTK from 'lib/json/toTiktok'
 import platformURL from 'utils/platformURL'
 import type { DataOptions } from 'types/media'
 import type { VideoInfo, Metadata } from 'types/any'
+import type { FormatVideoDefault, FormatAudioDefault, FormatVideoYT, FormatAudioYT } from 'types/json'
 
 class DLP {
   private url: any
@@ -105,7 +106,7 @@ class DLP {
     await youfile.copy(this.output.path, path.join(dir, fileName))
   }
 
-  getInfo(): VideoInfo | null {
+  get info(): VideoInfo | null {
     if (!this.json) return null
     const data: VideoInfo = {
       title: this.json.title,
@@ -121,6 +122,19 @@ class DLP {
     if (this.json.language) data.language = this.json.language
 
     return data
+  }
+
+  get formats(): {
+    audio?:
+      | FormatAudioDefault[]
+      | FormatAudioYT
+      | FormatAudioDefault
+      | { [key: string]: FormatAudioYT[] }
+      | null
+    mp4: FormatVideoDefault[] | FormatVideoYT[]
+    webm?: FormatVideoYT[] | null
+  } | null {
+    return this.json.formats
   }
 
   private getMetadata(): Metadata | null {

@@ -55,8 +55,8 @@ export interface JSONYT {
     mp4: FormatVideoYT[]
     webm: FormatVideoYT[] | null
     audio: {
-      [key: string]: FormatAudioYT[] | null
-    }
+      [key: string]: FormatAudioYT[]
+    } | null
   }
 }
 

@@ -16,3 +16,21 @@ export interface Metadata {
   artist: string
   description: string
 }
+
+export interface DependencyFormat {
+  installed: boolean
+  version: string | null
+  lastest: boolean | null
+}
+
+export interface DependenciesList {
+  ytdlp: DependencyFormat
+  ffmpeg: DependencyFormat
+  deno: DependencyFormat
+  aria2: DependencyFormat
+}
+
+export interface Dependencies {
+  'all-installed': boolean
+  list: DependenciesList
+}

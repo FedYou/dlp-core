@@ -13,15 +13,14 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
+    "forceConsistentCasingInFileNames": true,
     "baseUrl": ".",
     "paths": {
       "lib/*": ["src/lib/*"],
       "utils/*": ["src/utils/*"],
       "global/*": ["src/global/*"],
       "types/*": ["types/*"]
-    },
-    "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true
+    }
   },
   "include": ["src", "types"]
 }

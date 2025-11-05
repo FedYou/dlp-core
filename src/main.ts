@@ -9,6 +9,8 @@ import toJSONYT from 'lib/json/toYoutube'
 import toJSONIG from 'lib/json/toInstagram'
 import toJSONTK from 'lib/json/toTiktok'
 import platformURL from 'utils/platformURL'
+import statusDeps from 'lib/statusDeps'
+
 import type { DataOptions } from 'types/media'
 import type { VideoInfo, Metadata } from 'types/any'
 import type { FormatVideoDefault, FormatAudioDefault, FormatVideoYT, FormatAudioYT } from 'types/json'
@@ -147,5 +149,5 @@ class DLP {
   }
 }
 
-export { DLP }
+export { DLP, statusDeps }
 export default { DLP }

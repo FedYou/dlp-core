@@ -1,5 +1,5 @@
 import type { DataOptions } from './media'
-import type { VideoInfo } from './any'
+import type { VideoInfo, Dependencies } from './any'
 import type { FormatVideoDefault, FormatAudioDefault, FormatVideoYT, FormatAudioYT } from './json'
 
 interface SaveMediaOptions {
@@ -26,6 +26,7 @@ declare namespace core {
       webm?: FormatVideoYT[] | null
     }
   }
+  function statusDeps(): Promise<Dependencies>
 }
 
 export = core

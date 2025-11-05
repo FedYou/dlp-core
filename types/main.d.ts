@@ -1,19 +1,19 @@
-import type { DataOptions, MediaDownloadOn, MediaProcessOn } from './media.'
-import type { VideoInfo, Metadata } from './any'
+import type { DataOptions } from './media'
+import type { VideoInfo } from './any'
 import type { FormatVideoDefault, FormatAudioDefault, FormatVideoYT, FormatAudioYT } from './json'
 
 interface SaveMediaOptions {
   dir: string
   fileName: string
-  cover?: boolean = false
-  metadata?: boolean = false
+  cover?: boolean
+  metadata?: boolean
 }
 
 declare namespace core {
   class DLP {
-    async addURL(url: string): Promise<void>
-    async getMedia(options: DataOptions): Promise<void>
-    async saveMedia(options: SaveMediaOptions): Promise<void>
+    addURL(url: string): Promise<void>
+    getMedia(options: DataOptions): Promise<void>
+    saveMedia(options: SaveMediaOptions): Promise<void>
     get info(): VideoInfo | null
     get formats(): {
       audio?:

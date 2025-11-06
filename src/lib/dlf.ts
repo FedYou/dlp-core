@@ -3,7 +3,7 @@ import Aria2 from 'aria2'
 import getSize from 'utils/getSize'
 import getTime from 'utils/getTime'
 import cache from 'global/cache'
-import { spawn } from 'child_process'
+import { ChildProcessWithoutNullStreams, spawn } from 'child_process'
 import path from 'path'
 import youfile from 'youfile'
 
@@ -41,15 +41,23 @@ const COMMAND_ARGS = [
 ]
 
 let isExecuted = false
-
+let rpcProcess: ChildProcessWithoutNullStreams
 function runRPC() {
   if (isExecuted) return
   isExecuted = true
 
-  spawn(COMMAND, [...COMMAND_ARGS])
+  rpcProcess = spawn(COMMAND, [...COMMAND_ARGS])
 
   return
 }
+
+export function killRPC() {
+  if (rpcProcess) rpcProcess.kill('SIGTERM')
+}
+
+process.on('exit', () => killRPC())
+process.on('SIGINT', () => (killRPC(), process.exit(0)))
+process.on('SIGTERM', () => killRPC())
 
 runRPC()
 

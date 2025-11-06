@@ -3,7 +3,7 @@ import Aria2 from 'aria2'
 import getSize from 'utils/getSize'
 import getTime from 'utils/getTime'
 import cache from 'global/cache'
-import { execa } from 'execa'
+import { spawn } from 'child_process'
 import path from 'path'
 import youfile from 'youfile'
 
@@ -46,7 +46,8 @@ function runRPC() {
   if (isExecuted) return
   isExecuted = true
 
-  execa(COMMAND, [...COMMAND_ARGS], { all: true })
+  spawn(COMMAND, [...COMMAND_ARGS])
+
   return
 }
 

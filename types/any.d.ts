@@ -1,3 +1,5 @@
+import type { FileDownloadProgress } from './dlf'
+
 export interface VideoInfo {
   title: string
   uploader: string
@@ -33,4 +35,30 @@ export interface DependenciesList {
 export interface Dependencies {
   'all-installed': boolean
   list: DependenciesList
+}
+
+interface Status {
+  status:
+    | 'ready'
+    | 'JSON'
+    | 'JSONComplete'
+    | 'downloadingStart'
+    | 'downloading'
+    | 'downloadingComplete'
+    | 'processing'
+    | 'processingComplete'
+    | 'saving'
+    | 'saved'
+  type: 'video' | 'audio' | 'thumbnail' | 'json' | 'none'
+  download: FileDownloadProgress
+  downloaded: {
+    audio: boolean
+    video: boolean
+    thumbnail: boolean
+  }
+  processed: {
+    audio: boolean
+    video: boolean
+    thumbnail: boolean
+  }
 }

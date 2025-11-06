@@ -31,6 +31,8 @@ export default async function ({
     on?.start('thumbnail')
     await ffmpeg.toJpeg(PATHS.thumbnail, PATHS.jpeg)
     on?.complete('thumbnail', 0)
+  } else {
+    on?.complete('thumbnail', 0)
   }
 
   if (options.type === 'onlyAudio' && (json as any).formats.audio) {
@@ -52,6 +54,8 @@ export default async function ({
       } else if (options.vformat === 'webm') {
         await ffmpeg.toAudioWebm(PATHS.onlyAudio, PATHS.audioWebm)
       }
+      on?.complete('audio', 0)
+    } else {
       on?.complete('audio', 0)
     }
 
@@ -95,7 +99,7 @@ export default async function ({
   }
 
   // onlyVideo
-
+  on?.complete('video', 0)
   return {
     path: PATHS.onlyVideo,
     cover: PATHS.jpeg,

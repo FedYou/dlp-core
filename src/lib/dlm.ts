@@ -19,6 +19,8 @@ export default async function ({ json, options, on }: MediaDownloadOptions) {
     on?.start('thumbnail')
     await dlf({ url: json.thumbnail, fileName: NAMES.thumbnail, on: on as any })
     on?.complete('thumbnail', 0)
+  } else {
+    on?.complete('thumbnail', 0)
   }
 
   if (platform === 'tiktok') {
@@ -31,6 +33,8 @@ export default async function ({ json, options, on }: MediaDownloadOptions) {
       on?.start('video')
       await dlf({ url, referer, cookies, fileName: NAMES.tiktok, on: on as any })
       on?.complete('video', 0)
+    } else {
+      on?.complete('video', 0)
     }
     return
   }
@@ -42,6 +46,8 @@ export default async function ({ json, options, on }: MediaDownloadOptions) {
     if (!existsCache(fileName)) {
       on?.start('video')
       await dlf({ url, fileName: NAMES.onlyVideo, on: on as any })
+      on?.complete('video', 0)
+    } else {
       on?.complete('video', 0)
     }
   }
@@ -63,6 +69,8 @@ export default async function ({ json, options, on }: MediaDownloadOptions) {
     if (!existsCache(fileName)) {
       on?.start('audio')
       await dlf({ url, fileName: NAMES.onlyAudio, on: on as any })
+      on?.complete('audio', 0)
+    } else {
       on?.complete('audio', 0)
     }
   }

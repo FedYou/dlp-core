@@ -11,8 +11,9 @@ import toJSONTK from 'lib/json/toTiktok'
 import platformURL from 'utils/platformURL'
 import statusDeps from 'lib/statusDeps'
 
-import type { DataOptions } from 'types/media'
-import type { VideoInfo, Metadata } from 'types/any'
+import type { DataOptions, MediaDownloadOn, MediaProcessOn } from 'types/media'
+import type { FileDownloadProgress } from 'types/dlf'
+import type { VideoInfo, Metadata, Status } from 'types/any'
 import type { FormatVideoDefault, FormatAudioDefault, FormatVideoYT, FormatAudioYT } from 'types/json'
 
 class DLP {
@@ -21,6 +22,27 @@ class DLP {
   private json: any
   private platform: any
   private output: any
+  private _status: Status = {
+    status: 'ready',
+    type: 'none',
+    download: {
+      progress: 0,
+      speed: '---',
+      eta: '---',
+      byDownload: '---',
+      downloaded: '---'
+    },
+    downloaded: {
+      audio: false,
+      video: false,
+      thumbnail: false
+    },
+    processed: {
+      audio: false,
+      video: false,
+      thumbnail: false
+    }
+  }
 
   async addURL(url: string) {
     this.url = url
@@ -36,8 +58,11 @@ class DLP {
     }
 
     if (this.output) this.output = ''
-
+    this._status.status = 'JSON'
+    this._status.type = 'json'
     await this.getJSON()
+    this._status.status = 'JSONComplete'
+    this._status.type = 'none'
   }
 
   private async getJSON() {
@@ -63,8 +88,52 @@ class DLP {
       }
     }
 
-    await downloadMedia({ json: this.json, options })
-    this.output = await processMedia({ json: this.json, options })
+    await downloadMedia({ json: this.json, options, on: this.onDownload() })
+    this.output = await processMedia({ json: this.json, options, on: this.onProcess() })
+  }
+
+  private onDownload(): MediaDownloadOn {
+    const complete = (type: 'video' | 'audio' | 'thumbnail', _: number) => {
+      this._status.status = 'downloadingComplete'
+      this._status.type = type
+      this._status.downloaded[type] = true
+      this._status.download = {
+        progress: 0,
+        speed: '---',
+        eta: '---',
+        byDownload: '---',
+        downloaded: '---'
+      }
+    }
+    const start = (type: 'video' | 'audio' | 'thumbnail') => {
+      this._status.status = 'downloadingStart'
+      this._status.type = type
+      this._status.download = {
+        progress: 0,
+        speed: '---',
+        eta: '---',
+        byDownload: '---',
+        downloaded: '---'
+      }
+    }
+    const progress = (data: FileDownloadProgress) => {
+      this._status.status = 'downloading'
+      this._status.download = data
+    }
+    return { complete, progress, start }
+  }
+
+  private onProcess(): MediaProcessOn {
+    const complete = (type: 'video' | 'audio' | 'thumbnail') => {
+      this._status.status = 'processingComplete'
+      this._status.processed[type] = true
+    }
+    const start = (type: 'video' | 'audio' | 'thumbnail') => {
+      this._status.status = 'processing'
+      this._status.type = type
+    }
+
+    return { complete, start }
   }
 
   async saveMedia({
@@ -79,7 +148,7 @@ class DLP {
     metadata?: boolean
   }) {
     if (!this.output) return
-
+    this._status.status = 'saving'
     if (cover) {
       if (this.output.type === 'video' && this.output.format === 'mp4') {
         await ffmpeg.toMp4Cover({
@@ -106,6 +175,11 @@ class DLP {
       return
     }
     await youfile.copy(this.output.path, path.join(dir, fileName))
+    this._status.status = 'saved'
+    this._status.type = this.output.type
+  }
+  get status(): Status {
+    return this._status
   }
 
   get info(): VideoInfo | null {

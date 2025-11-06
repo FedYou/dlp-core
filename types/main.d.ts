@@ -1,5 +1,5 @@
 import type { DataOptions } from './media'
-import type { VideoInfo, Dependencies } from './any'
+import type { VideoInfo, Dependencies, Status } from './any'
 import type { FormatVideoDefault, FormatAudioDefault, FormatVideoYT, FormatAudioYT } from './json'
 
 interface SaveMediaOptions {
@@ -14,6 +14,7 @@ declare namespace core {
     addURL(url: string): Promise<void>
     getMedia(options: DataOptions): Promise<void>
     saveMedia(options: SaveMediaOptions): Promise<void>
+    get status(): Status
     get info(): VideoInfo | null
     get formats(): {
       audio?:

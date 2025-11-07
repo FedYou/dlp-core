@@ -79,7 +79,7 @@ class DLP {
 
   async getMedia(options: DataOptions) {
     if (options.type === 'video' || options.type === 'onlyAudio') {
-      if (!this.json.formats.audio) {
+      if (!this.json.formats.audio && this.json.platform !== 'tiktok') {
         throw new Error('Audio no available in this video', {
           cause: {
             code: 'AUDIO_NOT_AVAILABLE'

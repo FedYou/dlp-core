@@ -98,6 +98,16 @@ export default async function ({
     }
   }
 
+  if (options.type === 'video' && json.platform === 'tiktok') {
+    on?.complete('video', 0)
+    return {
+      path: PATHS.tiktok,
+      cover: PATHS.jpeg,
+      type: 'video',
+      format: 'mp4' as 'mp4' | 'webm'
+    }
+  }
+
   // onlyVideo
   on?.complete('video', 0)
   return {

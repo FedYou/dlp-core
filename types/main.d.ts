@@ -1,5 +1,5 @@
 import type { DataOptions } from './media'
-import type { VideoInfo, Dependencies, Status } from './any'
+import type { VideoInfo, Dependencies, Status, CacheStats } from './any'
 import type { FormatVideoDefault, FormatAudioDefault, FormatVideoYT, FormatAudioYT } from './json'
 
 interface SaveMediaOptions {
@@ -29,6 +29,7 @@ declare namespace core {
   }
   function statusDeps(): Promise<Dependencies>
   const cachePath: string
+  function getCacheStats(): CacheStats
 }
 
 export = core

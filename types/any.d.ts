@@ -62,3 +62,12 @@ interface Status {
     thumbnail: boolean
   }
 }
+
+export interface CacheStats {
+  unknown: string
+  audio: string
+  image: string
+  video: string
+  text: string
+  total: string
+}

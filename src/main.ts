@@ -11,6 +11,7 @@ import toJSONIG from 'lib/json/toInstagram'
 import toJSONTK from 'lib/json/toTiktok'
 import platformURL from 'utils/platformURL'
 import statusDeps from 'lib/statusDeps'
+import getCacheStats from 'lib/cacheStats'
 
 import type { DataOptions, MediaDownloadOn, MediaProcessOn } from 'types/media'
 import type { FileDownloadProgress } from 'types/dlf'
@@ -226,5 +227,5 @@ class DLP {
 
 const cachePath = cache.path
 
-export { DLP, statusDeps, cachePath }
+export { DLP, statusDeps, cachePath, getCacheStats }
 export default { DLP }

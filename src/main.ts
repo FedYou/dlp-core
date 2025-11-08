@@ -1,6 +1,7 @@
 import './stopExec'
 import path from 'path'
 import youfile from 'youfile'
+import cache from 'global/cache'
 import downloadMedia from 'lib/dlm'
 import ffmpeg from 'lib/ffmpeg'
 import processMedia from 'lib/processMedia'
@@ -223,5 +224,7 @@ class DLP {
   }
 }
 
-export { DLP, statusDeps }
+const cachePath = cache.path
+
+export { DLP, statusDeps, cachePath }
 export default { DLP }

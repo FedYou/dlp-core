@@ -28,6 +28,7 @@ declare namespace core {
     }
   }
   function statusDeps(): Promise<Dependencies>
+  const cachePath: string
 }
 
 export = core

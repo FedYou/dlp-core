@@ -34,7 +34,7 @@ declare namespace core {
         | { [key: string]: FormatAudioYT[] }
         | null
       mp4: FormatVideoDefault[] | FormatVideoYT[]
-      webm?: FormatVideoYT[]
+      webm?: FormatVideoYT[] | null
     }
     isAudioAvailable(): boolean
   }

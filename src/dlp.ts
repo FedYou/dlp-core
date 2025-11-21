@@ -66,7 +66,13 @@ export default class DLP {
 
   private async getJSON() {
     this.dumpJSON = await getJSON(this.url)
-    if (!this.dumpJSON) return
+    if (!this.dumpJSON) {
+      throw new Error('Error obtaining JSON', {
+        cause: {
+          code: 'JSON_OBTAIN'
+        }
+      })
+    }
     if (this.platform === 'youtube') {
       this.json = toJSONYT(this.dumpJSON)
     } else if (this.platform === 'instagram') {
@@ -76,7 +82,15 @@ export default class DLP {
     }
   }
 
+  private setErrorNoJSON() {
+    throw new Error('Error no JSON Data', {
+      cause: {
+        code: 'NO_JSON_DATA'
+      }
+    })
+  }
   async getMedia(options: DataOptions) {
+    if (!this.json) this.setErrorNoJSON()
     if (options.type === 'video' || options.type === 'onlyAudio') {
       if (!this.json.formats.audio && this.json.platform !== 'tiktok') {
         throw new Error('Audio no available in this video', {
@@ -92,6 +106,7 @@ export default class DLP {
   }
 
   getMediaSizeTotal({ type, vformat, vquality, language }: DataOptions) {
+    if (!this.json) this.setErrorNoJSON()
     let amount = 0
     const { audio } = this.json.formats
     if ((type === 'onlyAudio' || type === 'video') && this.platform === 'instagram') {
@@ -166,7 +181,13 @@ export default class DLP {
     cover?: boolean
     metadata?: boolean
   }) {
-    if (!this.output) return
+    if (!this.output) {
+      throw new Error('Error no media data', {
+        cause: {
+          code: 'NO_MEDIA_DATA'
+        }
+      })
+    }
     this._status.status = 'saving'
     if (cover) {
       if (this.output.type === 'video' && this.output.format === 'mp4') {
@@ -201,8 +222,8 @@ export default class DLP {
     return this._status
   }
 
-  get info(): VideoInfo | null {
-    if (!this.json) return null
+  get info(): VideoInfo {
+    if (!this.json) this.setErrorNoJSON()
     const data: VideoInfo = {
       title: this.json.title,
       uploader: this.json.uploader,
@@ -228,12 +249,13 @@ export default class DLP {
       | null
     mp4: FormatVideoDefault[] | FormatVideoYT[]
     webm?: FormatVideoYT[] | null
-  } | null {
+  } {
+    if (!this.json) this.setErrorNoJSON()
     return this.json.formats
   }
 
-  private getMetadata(): Metadata | null {
-    if (!this.json) return null
+  private getMetadata(): Metadata {
+    if (!this.json) this.setErrorNoJSON()
     return {
       title: this.json.title,
       artist: this.json.uploader,

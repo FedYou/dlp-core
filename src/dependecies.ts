@@ -6,7 +6,7 @@ import https from 'https'
 // --- Types ------------------
 // ----------------------------
 
-import type { Dependencies, DependencyFormat } from 'types/any'
+import type { DependenciesStatus, DependencyStatusFormat } from 'types/any'
 
 // ----------------------------
 // --- Variables --------------
@@ -74,7 +74,7 @@ async function isLastVersionYTDLP(version: string | null): Promise<boolean> {
   return (await getVersionYTDLP()) === version
 }
 
-function toFormatDependency(version: string | null): DependencyFormat {
+function toFormatDependency(version: string | null): DependencyStatusFormat {
   return {
     installed: version !== null,
     version: version,
@@ -82,7 +82,7 @@ function toFormatDependency(version: string | null): DependencyFormat {
   }
 }
 
-export default async function (): Promise<Dependencies> {
+async function status(): Promise<DependenciesStatus> {
   const ytdlp = toFormatDependency(await getVersion('yt-dlp'))
 
   ytdlp.lastest = await isLastVersionYTDLP(ytdlp.version)
@@ -101,3 +101,5 @@ export default async function (): Promise<Dependencies> {
     }
   }
 }
+
+export default { status }

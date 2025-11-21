@@ -19,22 +19,22 @@ export interface Metadata {
   description: string
 }
 
-export interface DependencyFormat {
+export interface DependencyStatusFormat {
   installed: boolean
   version: string | null
   lastest: boolean | null
 }
 
-export interface DependenciesList {
-  ytdlp: DependencyFormat
-  ffmpeg: DependencyFormat
-  deno: DependencyFormat
-  aria2: DependencyFormat
+export interface DependenciesStatusList {
+  ytdlp: DependencyStatusFormat
+  ffmpeg: DependencyStatusFormat
+  deno: DependencyStatusFormat
+  aria2: DependencyStatusFormat
 }
 
-export interface Dependencies {
+export interface DependenciesStatus {
   'all-installed': boolean
-  list: DependenciesList
+  list: DependenciesStatusList
 }
 
 interface Status {

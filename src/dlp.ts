@@ -92,8 +92,15 @@ export default class DLP {
 
   async getMedia(options: DataOptions) {
     if (!this.json) this.setErrorNoJSON()
+    if (options.type === 'onlyAudio' && this.platform === 'tiktok') {
+      throw new Error('Cannot extract the audio from TikTok videos separately', {
+        cause: {
+          code: 'AUDIO_NOT_AVAILABLE_TIKTOK'
+        }
+      })
+    }
     if (options.type === 'video' || options.type === 'onlyAudio') {
-      if (!this.json.formats.audio && this.json.platform !== 'tiktok') {
+      if (!this.json.formats.audio && this.platform !== 'tiktok') {
         throw new Error('Audio no available in this video', {
           cause: {
             code: 'AUDIO_NOT_AVAILABLE'

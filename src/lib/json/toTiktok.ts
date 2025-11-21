@@ -21,10 +21,13 @@ function formatVideo(format: any): FormatVideoDefault {
 export default function (json: any): JSONTK {
   const formats: {
     mp4: FormatVideoDefault[]
+    audio: true | null
   } = {
-    mp4: []
+    mp4: [],
+    audio: null
   }
 
+  if (json.acodec === 'aac') formats.audio = true
   json.formats.forEach((format: any) => {
     if (format.format_note !== 'watermarked') {
       formats.mp4.push(formatVideo(format))

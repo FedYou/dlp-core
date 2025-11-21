@@ -73,5 +73,6 @@ export interface JSONTK {
   id: string
   formats: {
     mp4: FormatVideoDefault[]
+    audio: true | null
   }
 }

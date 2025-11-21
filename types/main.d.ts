@@ -9,6 +9,11 @@ interface SaveMediaOptions {
   metadata?: boolean
 }
 
+interface Cache {
+  path: string
+  getStats(): CacheStats
+}
+
 declare namespace core {
   class DLP {
     addURL(url: string): Promise<void>
@@ -28,8 +33,7 @@ declare namespace core {
     }
   }
   function statusDeps(): Promise<Dependencies>
-  const cachePath: string
-  function getCacheStats(): CacheStats
+  const Cache: Cache
 }
 
 export = core

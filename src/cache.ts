@@ -1,5 +1,5 @@
-import youfile from 'youfile'
 import fs from 'fs'
+import youfile from 'youfile'
 import cache from 'global/cache'
 import getSize from 'utils/getSize'
 import type { CacheStats } from 'types/any'
@@ -33,7 +33,7 @@ function fastFileType(filePath: string): 'unknown' | 'audio' | 'image' | 'video'
   return 'unknown'
 }
 
-function getCacheStats(): CacheStats {
+function getStats(): CacheStats {
   const files = youfile.get.allFilesSync(cache.path)
   const sizes = {
     unknown: 0,
@@ -58,4 +58,7 @@ function getCacheStats(): CacheStats {
   }
 }
 
-export default getCacheStats
+export default {
+  getStats,
+  path: cache.path
+}

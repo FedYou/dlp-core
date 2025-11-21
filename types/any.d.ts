@@ -37,7 +37,7 @@ export interface DependenciesStatus {
   list: DependenciesStatusList
 }
 
-interface Status {
+export interface Status {
   status:
     | 'ready'
     | 'JSON'

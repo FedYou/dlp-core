@@ -42,5 +42,4 @@ declare namespace core {
   const Cache: Cache
 }
 
-export = core
-export as namespace core
+export { core as default }

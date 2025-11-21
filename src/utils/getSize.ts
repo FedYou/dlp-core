@@ -3,13 +3,13 @@ function getSize(bytes: number) {
     return `${bytes}B`
   }
   if (bytes < 1024 * 1024) {
-    return `${(bytes / 1024).toFixed(2)}KB`
+    return `${(bytes / 1024).toFixed(2)}KiB`
   }
   if (bytes < 1024 * 1024 * 1024) {
-    return `${(bytes / 1024 / 1024).toFixed(2)}MB`
+    return `${(bytes / 1024 / 1024).toFixed(2)}MiB`
   }
   if (bytes < 1024 * 1024 * 1024 * 1024) {
-    return `${(bytes / 1024 / 1024 / 1024).toFixed(2)}GB`
+    return `${(bytes / 1024 / 1024 / 1024).toFixed(2)}GiB`
   }
 }
 

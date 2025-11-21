@@ -22,9 +22,10 @@ declare namespace core {
   class DLP {
     addURL(url: string): Promise<void>
     getMedia(options: DataOptions): Promise<void>
+    getMediaSizeTotal(options: DataOptions): string
     saveMedia(options: SaveMediaOptions): Promise<void>
     get status(): Status
-    get info(): VideoInfo | null
+    get info(): VideoInfo
     get formats(): {
       audio?:
         | FormatAudioDefault[]
@@ -33,8 +34,9 @@ declare namespace core {
         | { [key: string]: FormatAudioYT[] }
         | null
       mp4: FormatVideoDefault[] | FormatVideoYT[]
-      webm?: FormatVideoYT[] | null
+      webm?: FormatVideoYT[]
     }
+    isAudioAvailable(): boolean
   }
   const Dependecies: Dependecies
   const Cache: Cache

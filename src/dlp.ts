@@ -89,6 +89,7 @@ export default class DLP {
       }
     })
   }
+
   async getMedia(options: DataOptions) {
     if (!this.json) this.setErrorNoJSON()
     if (options.type === 'video' || options.type === 'onlyAudio') {
@@ -252,6 +253,11 @@ export default class DLP {
   } {
     if (!this.json) this.setErrorNoJSON()
     return this.json.formats
+  }
+
+  isAudioAvailable(): boolean {
+    if (!this.json) this.setErrorNoJSON()
+    return this.json.formats.audio !== null
   }
 
   private getMetadata(): Metadata {

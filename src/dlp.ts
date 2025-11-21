@@ -8,6 +8,7 @@ import toJSONYT from 'lib/json/toYoutube'
 import toJSONIG from 'lib/json/toInstagram'
 import toJSONTK from 'lib/json/toTiktok'
 import platformURL from 'utils/platformURL'
+import getSize from 'utils/getSize'
 
 import type { DataOptions, MediaDownloadOn, MediaProcessOn } from 'types/media'
 import type { FileDownloadProgress } from 'types/dlf'
@@ -88,6 +89,26 @@ export default class DLP {
 
     await downloadMedia({ json: this.json, options, on: this.onDownload() })
     this.output = await processMedia({ json: this.json, options, on: this.onProcess() })
+  }
+
+  getMediaSizeTotal({ type, vformat, vquality, language }: DataOptions) {
+    let amount = 0
+    const { audio } = this.json.formats
+    if ((type === 'onlyAudio' || type === 'video') && this.platform === 'instagram') {
+      amount += audio?.filesize ?? 0
+    }
+
+    if (this.platform === 'youtube' && (type === 'video' || type === 'onlyAudio')) {
+      const _language = audio[language as any] ?? audio[this.json.language]
+      amount += (_language as any)?.filesize ?? 0
+    }
+
+    if (type === 'video' || type === 'onlyVideo') {
+      const _vformat = this.platform === 'youtube' ? vformat : 'mp4'
+      amount += this.json.formats[_vformat as any][vquality as any]?.filesize ?? 0
+    }
+
+    return getSize(amount)
   }
 
   private onDownload(): MediaDownloadOn {

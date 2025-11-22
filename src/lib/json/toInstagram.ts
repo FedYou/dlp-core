@@ -1,3 +1,5 @@
+import getDate from 'utils/getDate'
+
 // ----------------------------
 // --- Types ------------------
 // ----------------------------
@@ -55,7 +57,7 @@ export default function (json: any): JSONIG {
     title: json.title,
     uploader: json.uploader,
     description: json.description,
-    upload_date: json.upload_date,
+    upload_date: getDate(json.upload_date),
     duration: json.duration_string,
     thumbnail: json.thumbnail,
     id: json.id,

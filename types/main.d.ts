@@ -12,6 +12,7 @@ interface SaveMediaOptions {
 interface Cache {
   path: string
   getStats(): CacheStats
+  clear(): void
 }
 
 interface Dependecies {

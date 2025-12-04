@@ -58,7 +58,13 @@ function getStats(): CacheStats {
   }
 }
 
+function clear() {
+  youfile.removeExistsSync(cache.path)
+  youfile.write.dirSync(cache.path)
+}
+
 export default {
   getStats,
+  clear,
   path: cache.path
 }

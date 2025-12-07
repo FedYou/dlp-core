@@ -4,4 +4,4 @@ import Cache from './cache'
 import Dependecies from './dependecies'
 
 export { DLP, Dependecies, Cache }
-export default { DLP }
+export default { DLP, Dependecies, Cache }

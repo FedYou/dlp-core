@@ -259,7 +259,7 @@ export default class DLP {
 
   isAudioAvailable(): boolean {
     if (!this.json) this.setErrorNoJSON()
-    return this.json.formats.audio
+    return this.json.formats.audio ? true : false
   }
 
   private getMetadata(): Metadata {

@@ -1,5 +1,5 @@
 import type { DataOptions } from './media'
-import type { VideoInfo, DependenciesStatus, Status, CacheStats } from './any'
+import type { VideoInfo, DependenciesStatus, DownloadStatus, CacheStats } from './any'
 import type { FormatVideo, FormatAudio, FormatAudioLanguages } from './json'
 
 interface SaveMediaOptions {
@@ -24,7 +24,7 @@ export declare class DLP {
   getMedia(options: DataOptions): Promise<void>
   getMediaSizeTotal(options: DataOptions): string
   saveMedia(options: SaveMediaOptions): Promise<void>
-  get status(): Status
+  get downloadStatus(): DownloadStatus
   get info(): VideoInfo
   get formats(): {
     audio: FormatAudio | FormatAudioLanguages | boolean

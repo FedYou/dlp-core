@@ -1,4 +1,5 @@
 import getDate from 'utils/getDate'
+import getSize from 'utils/getSize'
 
 // ----------------------------
 // --- Types ------------------
@@ -18,7 +19,7 @@ const FORMAT_NOTE_VIDEO = /\b\d{3,4}p\d*(?:\s*\(\d+\))?\b/
 function formatVideo(format: any): FormatVideo {
   return {
     ext: format.ext,
-    filesize: format.filesize_approx,
+    filesize: getSize(format.filesize_approx) as string,
     codec: format.vcodec,
     fps: format.fps,
     resolution: format.resolution,
@@ -31,7 +32,7 @@ function formatAudio(format: any): FormatAudio {
   return {
     language: format.language,
     ext: format.ext,
-    filesize: format.filesize_approx,
+    filesize: getSize(format.filesize_approx) as string,
     abr: format.abr,
     codec: format.acodec,
     url: format.url

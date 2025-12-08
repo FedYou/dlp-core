@@ -15,7 +15,7 @@ interface Cache {
   clear(): void
 }
 
-interface Dependecies {
+interface Dependencies {
   status(): Promise<DependenciesStatus>
 }
 
@@ -35,11 +35,11 @@ export declare class DLP {
 }
 
 export const Cache: Cache
-export const Dependecies: Dependecies
+export const Dependencies: Dependencies
 
 declare const _default: {
   DLP: typeof DLP
-  Dependecies: Dependecies
+  Dependencies: Dependencies
   Cache: Cache
 }
 

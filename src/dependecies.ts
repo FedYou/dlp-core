@@ -92,7 +92,7 @@ async function status(): Promise<DependenciesStatus> {
 
   await Promise.all([
     getVersion('yt-dlp').then(
-      (version) => (list.ytdlp = { ...list.ytdlp, ...toFormatDependency(version) })
+      (version) => (list.ytdlp = { ...toFormatDependency(version), ...list.ytdlp })
     ),
     isLastVersionYTDLP(list.ytdlp.version).then((lastest) => (list.ytdlp.lastest = lastest)),
     getVersion('ffmpeg').then((version) => (list.ffmpeg = toFormatDependency(version))),

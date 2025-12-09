@@ -10,7 +10,7 @@ export interface VideoInfo {
   id: string
   platform: string
   /** Youtube */
-  views?: string
+  views?: number
   /** Youtube */
   language?: string
 }

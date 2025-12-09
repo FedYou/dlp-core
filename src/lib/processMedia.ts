@@ -12,14 +12,7 @@ import type { MediaProcessOptions as Options } from 'types/media'
 // --- Functions --------------
 // ----------------------------
 
-export default async function ({
-  json,
-  options,
-  on = {
-    start: () => {},
-    complete: () => {}
-  }
-}: Options): Promise<{
+export default async function ({ json, options }: Options): Promise<{
   path: string
   cover: string
   type: 'video' | 'audio'
@@ -28,19 +21,15 @@ export default async function ({
   const { NAMES, PATHS } = generateCache(json, options)
 
   if (!existsCache(NAMES.jpeg)) {
-    on?.start('thumbnail')
     await ffmpeg.toJpeg(PATHS.thumbnail, PATHS.jpeg)
-    on?.complete('thumbnail', 0)
   } else {
-    on?.complete('thumbnail', 0)
   }
 
   if (options.type === 'onlyAudio' && (json as any).formats.audio) {
-    on?.start('audio')
     if (!existsCache(NAMES.audioMp3)) {
       await ffmpeg.toAudioMp3(PATHS.onlyAudio, PATHS.audioMp3)
     }
-    on?.complete('audio', 0)
+
     return { path: PATHS.audioMp3, cover: PATHS.jpeg, type: 'audio', format: 'mp3' }
   }
 
@@ -48,18 +37,13 @@ export default async function ({
     let audioKeyName: 'audioAac' | 'audioWebm' = options.vformat === 'mp4' ? 'audioAac' : 'audioWebm'
 
     if (!existsCache(NAMES[audioKeyName])) {
-      on?.start('audio')
       if (options.vformat === 'mp4') {
         await ffmpeg.toAudioAac(PATHS.onlyAudio, PATHS.audioAac)
       } else if (options.vformat === 'webm') {
         await ffmpeg.toAudioWebm(PATHS.onlyAudio, PATHS.audioWebm)
       }
-      on?.complete('audio', 0)
     } else {
-      on?.complete('audio', 0)
     }
-
-    on?.start('video')
 
     if (!existsCache(NAMES.video)) {
       await ffmpeg.toVideo({
@@ -70,7 +54,6 @@ export default async function ({
       })
     }
 
-    on?.complete('video', 0)
     return {
       path: PATHS.video,
       cover: PATHS.jpeg,
@@ -79,7 +62,6 @@ export default async function ({
     }
   }
   if (options.type === 'video' && json.platform === 'instagram') {
-    on?.start('video')
     if (!existsCache(NAMES.video)) {
       await ffmpeg.toVideo({
         entryVideo: PATHS.onlyVideo,
@@ -88,7 +70,6 @@ export default async function ({
         type: options.vformat as 'mp4' | 'webm'
       })
     }
-    on?.complete('video', 0)
 
     return {
       path: PATHS.video,
@@ -99,7 +80,6 @@ export default async function ({
   }
 
   if (options.type === 'video' && json.platform === 'tiktok') {
-    on?.complete('video', 0)
     return {
       path: PATHS.tiktok,
       cover: PATHS.jpeg,
@@ -109,7 +89,7 @@ export default async function ({
   }
 
   // onlyVideo
-  on?.complete('video', 0)
+
   return {
     path: PATHS.onlyVideo,
     cover: PATHS.jpeg,

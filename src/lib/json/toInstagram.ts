@@ -1,5 +1,4 @@
 import getDate from 'utils/getDate'
-import getSize from 'utils/getSize'
 
 // ----------------------------
 // --- Types ------------------
@@ -14,7 +13,7 @@ import type { JSON, FormatVideo, FormatAudio } from 'types/json'
 function formatVideo(format: any): FormatVideo {
   return {
     ext: format.ext,
-    filesize: getSize(format.filesize_approx) as string,
+    filesize: format.filesize_approx,
     codec: format.vcodec,
     resolution: format.resolution,
     resolution_note: format.resolution.split('x')[0] + 'p',
@@ -25,7 +24,7 @@ function formatVideo(format: any): FormatVideo {
 function formatAudio(format: any): FormatAudio {
   return {
     ext: format.ext,
-    filesize: getSize(format.filesize_approx) as string,
+    filesize: format.filesize_approx,
     abr: format.abr,
     codec: format.acodec,
     url: format.url

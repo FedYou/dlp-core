@@ -6,18 +6,13 @@ import generateCache from 'utils/generateCache'
 // --- Types ------------------
 // ----------------------------
 
-import type { MediaProcessOptions as Options } from 'types/media'
+import type { MediaProcessOptions as Options, MediaProcess } from 'types/media'
 
 // ----------------------------
 // --- Functions --------------
 // ----------------------------
 
-export default async function ({ json, options }: Options): Promise<{
-  path: string
-  cover: string
-  type: 'video' | 'audio'
-  format: 'mp4' | 'webm' | 'mp3'
-}> {
+export default async function ({ json, options }: Options): Promise<MediaProcess> {
   const { NAMES, PATHS } = generateCache(json, options)
 
   if (!existsCache(NAMES.jpeg)) {

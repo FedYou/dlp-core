@@ -64,8 +64,16 @@ async function getVersion(type: 'yt-dlp' | 'ffmpeg' | 'deno' | 'aria2'): Promise
 
 async function fetchGithubVersion(): Promise<string | null> {
   return new Promise((resolve, reject) => {
+    const options = {
+      hostname: 'api.github.com',
+      path: '/repos/yt-dlp/yt-dlp/releases/latest',
+      headers: {
+        'User-Agent': 'dlp',
+        Accept: 'application/vnd.github+json'
+      }
+    }
     https
-      .get('https://api.github.com/repos/yt-dlp/yt-dlp/releases/latest', (res) => {
+      .get(options, (res) => {
         let data = ''
         res.on('data', (chunk) => (data += chunk))
         res.on('end', () => resolve(JSON.parse(data).tag_name))

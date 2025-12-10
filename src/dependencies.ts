@@ -1,10 +1,8 @@
 import { exec } from 'child_process'
 import { promisify } from 'util'
 import https from 'https'
-// @ts-ignore
-import TinyCache from 'tinycache'
-
-const cache = new TinyCache()
+import cache from 'global/cache'
+import youfile from 'youfile'
 
 // ----------------------------
 // --- Types ------------------
@@ -62,7 +60,7 @@ async function getVersion(type: 'yt-dlp' | 'ffmpeg' | 'deno' | 'aria2'): Promise
   return null
 }
 
-async function fetchGithubVersion(): Promise<string | null> {
+async function fetchGithubVersion(): Promise<string> {
   return new Promise((resolve, reject) => {
     const options = {
       hostname: 'api.github.com',
@@ -82,16 +80,32 @@ async function fetchGithubVersion(): Promise<string | null> {
   })
 }
 
-async function getVersionYTDLP() {
-  const cached = cache.get('yt-dlp')
-  if (cached) return cached
-
+async function cacheFromFetch(filePath: string): Promise<string> {
   const version = await fetchGithubVersion()
-  if (version) cache.put('yt-dlp', version, 1000 * 60 * 60)
-
+  const ONE_HOUR = 3600 * 1000
+  youfile.write.fileSync(filePath, version + '|' + (Date.now() + ONE_HOUR))
   return version
 }
 
+async function getVersionYTDLP(): Promise<string> {
+  const filePath = cache.path + '/yt-dlp'
+
+  if (youfile.existsSync(filePath)) {
+    const file = youfile.read.fileSync(filePath, 'utf-8') as any
+    const [version, expires] = file.split('|')
+
+    const now = Date.now()
+
+    if (now < parseInt(expires)) {
+      return version
+    } else {
+      console.log('no-cache')
+      return await cacheFromFetch(filePath)
+    }
+  } else {
+    return await cacheFromFetch(filePath)
+  }
+}
 async function isLastVersionYTDLP(version: string | null): Promise<boolean> {
   return (await getVersionYTDLP()) === version
 }
